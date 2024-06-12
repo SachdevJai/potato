@@ -3,13 +3,6 @@
 
 void initScanner(const char* source);
 
-typedef struct {
-    TokenType type;
-    const char* start;
-    int length;
-    int line;
-} Token;
-
 typedef enum {
     // Single-character tokens.
     TOKEN_LEFT_PAREN, TOKEN_RIGHT_PAREN,
@@ -32,7 +25,15 @@ typedef enum {
     TOKEN_ERROR, TOKEN_EOF
 } TokenType;
 
+typedef struct {
+    TokenType type;
+    const char* start;
+    int length;
+    int line;
+} Token;
 
 Token scanToken();
+
+
 
 #endif

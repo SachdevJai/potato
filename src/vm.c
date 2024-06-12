@@ -1,5 +1,6 @@
 #include "vm.h"
 #include "debug.h"
+#include "compiler.h"
 
 VM vm;
 
@@ -32,10 +33,8 @@ void initVM() {
 }
 
 void exitVM() {
-
+    return;
 }
-
-
 
 static InterpretResult run() {
 #define READ_BYTE() (*vm.ip++)
@@ -48,9 +47,9 @@ static InterpretResult run() {
 #ifdef DEBUG_TRACE_EXECUTION
     printf("          ");
     for (Value* slot = vm.stack; slot < vm.sp; slot++) {
-      printf("[ ");
-      printValue(*slot);
-      printf(" ]");
+    printf("[ ");
+    printValue(*slot);
+    printf(" ]");
     }
     printf("\n");
     disassembleInstruction(vm.chunk,(int)(vm.ip - vm.chunk->code));
@@ -93,6 +92,19 @@ static InterpretResult run() {
 }
 
 InterpretResult interpret(const char* source) {
-    compile(source);
-    return INTERPRET_OK;
+    Chunk chunk;
+    initChunk(&chunk);
+
+    if(!compile(source, &chunk)) {
+        freeChunk(&chunk);
+        return INTERPRET_COMPILE_ERROR;
+    }
+
+    vm.chunk = &chunk;
+    vm.ip = vm.chunk->code;
+
+    InterpretResult result = run();
+
+    freeChunk(&chunk);
+    return result;
 }

@@ -1,21 +1,21 @@
 TARGET_EXEC := potato
 BUILD_DIR := ./build
 SRC_DIR := ./src
-INCLUDE_DIR := ./inc
+INCLUDE_DIR := ./headers
 
-SRCS := $(shell find $(SRC_DIR) -name '*.c')
-OBJS := $(SRCS:$(SRC_DIR)/%=$(BUILD_DIR)/%.o)
-DEPS := $(OBJS:.o=.d)
+SRCS := $(wildcard $(SRC_DIR)/*.c)
+OBJS := $(SRCS:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
 
 CC := gcc
-CFLAGS := -g -I ./headers -MMD -MP
+CFLAGS := -g -I $(INCLUDE_DIR)
 
 $(TARGET_EXEC): $(OBJS)
-	$(CC) $(OBJS) -o $@
+	$(CC) $^ -o $@
 
-$(BUILD_DIR)/%.c.o: $(SRC_DIR)/%.c
-	mkdir -p $(BUILD_DIR)
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf ./build
+	rm -rf $(BUILD_DIR)/*
+
