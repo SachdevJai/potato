@@ -73,7 +73,7 @@ static void emitBytes(uint8_t byte1, uint8_t byte2) {
 }
 
 static void endCompiler() {
-    
+
     emitByte(OP_RETURN);
 
 #ifdef DEBUG_PRINT_CODE

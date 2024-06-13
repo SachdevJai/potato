@@ -54,6 +54,8 @@ static InterpretResult run() {
     printf("\n");
     disassembleInstruction(vm.chunk,(int)(vm.ip - vm.chunk->code));
 #endif
+    
+    // printf("%g\n", *vm.sp);
 
         uint8_t instruction;
         switch(instruction = READ_BYTE()) {
