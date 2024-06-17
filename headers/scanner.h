@@ -1,6 +1,11 @@
 #ifndef potato_scanner_h
 #define potato_scanner_h
 
+#include <stdio.h>
+#include <string.h>
+
+#include "common.h"
+
 void initScanner(const char* source);
 
 typedef enum {

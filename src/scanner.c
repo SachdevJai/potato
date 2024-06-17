@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <string.h>
-
 #include "scanner.h"
-#include "common.h"
 
 typedef struct {
     const char* start;
@@ -57,6 +53,7 @@ static char advance() {
 static char peek() {
     return *scanner.current;
 }
+
 static char peekNext() {
   if (isAtEnd()) return '\0';
   return scanner.current[1];

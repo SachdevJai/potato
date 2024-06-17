@@ -4,6 +4,7 @@
 #include "common.h"
 #include "value.h"
 #include "utils.h"
+#include "memory.h"
 
 typedef enum {
     OP_CONSTANT,
@@ -14,6 +15,13 @@ typedef enum {
     OP_MULTIPLY,
     OP_DIVIDE,
     OP_RETURN,
+    OP_NIL,
+    OP_TRUE,
+    OP_FALSE,
+    OP_NOT,
+    OP_EQUAL,
+    OP_GREATER,
+    OP_LESS,
 } OpCode;
 
 typedef struct {
