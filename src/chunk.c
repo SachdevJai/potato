@@ -1,4 +1,8 @@
+#include <stdlib.h>
+
 #include "chunk.h"
+#include "memory.h"
+#include "vm.h"
 
 void initChunk(Chunk* chunk) {
     chunk->capacity = 0;

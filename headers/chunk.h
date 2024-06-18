@@ -3,8 +3,6 @@
 
 #include "common.h"
 #include "value.h"
-#include "utils.h"
-#include "memory.h"
 
 typedef enum {
     OP_CONSTANT,

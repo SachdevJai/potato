@@ -1,4 +1,17 @@
+#include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+#include <stdlib.h>
+
+#include "common.h"
+#include "compiler.h"
+#include "debug.h"
+#include "object.h"
+#include "memory.h"
 #include "vm.h"
+
+VM vm;
 
 static void resetStack() {
     vm.sp = vm.stack;
@@ -48,13 +61,6 @@ void initVM() {
 
 void exitVM() {
     freeObjects();
-}
-
-static ObjString* takeString(char* chars, int length) {
-    ObjString* string = ALLOCATE_OBJ(ObjString, OBJ_STRING);
-    string->chars = chars;
-    string->length = length;
-    return string;
 }
 
 static Value concatenate(Value string1, Value string2) {

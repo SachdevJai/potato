@@ -1,17 +1,13 @@
 #ifndef potato_value_h
 #define potato_value_h
 
-#include <stdbool.h>
-#include <stdio.h>
 #include <string.h>
 
 #include "common.h"
-#include "memory.h"
-#include "object.h"
+
 
 typedef struct Obj Obj;
 typedef struct ObjString ObjString;
-
 
 typedef enum {
     VAL_BOOL,
@@ -54,6 +50,5 @@ void writeValueArray(ValueArray* array, Value value);
 void freeValueArray(ValueArray* array);
 void printValue(Value value);
 bool valuesEqual(Value value1, Value value2);
-
 
 #endif

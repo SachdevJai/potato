@@ -1,10 +1,7 @@
 #ifndef potato_memory_h
 #define potato_memory_h
 
-#include <stdlib.h>
-
 #include "common.h"
-#include "vm.h"
 #include "object.h"
 
 #define GROW_CAPACITY(capacity) \

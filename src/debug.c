@@ -1,6 +1,9 @@
-#include "debug.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "debug.h"
+#include "object.h"
+#include "value.h"
 
 void disassembleChunk(Chunk* chunk, const char* name) {
     printf("==========%s==========\n", name);
@@ -8,11 +11,6 @@ void disassembleChunk(Chunk* chunk, const char* name) {
     for(int offset = 0; offset < chunk->count;) {
         offset = disassembleInstruction(chunk, offset);
     }
-}
-
-static int simpleInstruction(const char* OpCode, int offset) {
-    printf("%s\n", OpCode);
-    return offset + 1;
 }
 
 static int constantInstruction(const char* OpCode, Chunk* chunk, int offset) {
@@ -34,7 +32,10 @@ static int longConstantInstruction(const char* OpCode, Chunk* chunk, int offset)
     return offset + 4;
 }
 
-
+static int simpleInstruction(const char* OpCode, int offset) {
+    printf("%s\n", OpCode);
+    return offset + 1;
+}
 
 int getLine(Chunk* chunk, int offset) {
     
