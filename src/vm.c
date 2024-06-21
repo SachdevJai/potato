@@ -57,6 +57,7 @@ static Value peek(int distance) {
 
 void initVM() {
     resetStack();
+    initTable(&vm.strings);
 }
 
 void exitVM() {
