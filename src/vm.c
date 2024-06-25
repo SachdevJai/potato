@@ -8,8 +8,8 @@
 #include "compiler.h"
 #include "debug.h"
 #include "object.h"
-#include "memory.h"
 #include "vm.h"
+#include "memory.h"
 
 VM vm;
 
@@ -58,9 +58,12 @@ static Value peek(int distance) {
 void initVM() {
     resetStack();
     initTable(&vm.strings);
+    initTable(&vm.globals);
 }
 
 void exitVM() {
+    freeTable(&vm.strings);
+    freeTable(&vm.globals);
     freeObjects();
 }
 
@@ -90,6 +93,7 @@ static InterpretResult run() {
     vm.sp[-2] = NUMBER_VAL(AS_NUMBER(vm.sp[-2]) op AS_NUMBER(vm.sp[-1])); \
     vm.sp--; \
 } while(0);
+#define READ_STRING() AS_STRING(READ_CONSTANT());
     
     for(;;) {
 
@@ -150,8 +154,7 @@ static InterpretResult run() {
                 break;
 
             case OP_RETURN:
-                printValue(pop());
-                printf("\n");
+                // exit compiler
                 return INTERPRET_OK;
 
             case OP_NIL: 
@@ -188,9 +191,22 @@ static InterpretResult run() {
                 BINARY_OP(BOOL_VAL, <);
                 break;
             
+            case OP_PRINT:
+                printValue(pop());
+                printf("\n");
+                break;
+
+            case OP_POP:
+                pop();
+                break;
+
+            case OP_DEFINE_GLOBAL:
+                ObjString* name = READ_STRING();
+                tableSet(&vm.globals, name, peek(0));
         }
     }
 
+#undef READ_STRING
 #undef BINARY_OP
 #undef READ_LONG_CONSTANT
 #undef READ_CONSTANT

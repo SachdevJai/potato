@@ -15,8 +15,7 @@
 
 void* reallocate(void* ptr, size_t oldSize, size_t newSize);
 
-#define ALLOCATE(type, size) \
-    (type*) reallocate(NULL, 0, sizeof(type) * (size))\
+#define ALLOCATE(type, size) (type*)reallocate(NULL, 0, sizeof(type) * (size))
 
 #define FREE(type, ptr) \
     reallocate(ptr, sizeof(type), 0)
