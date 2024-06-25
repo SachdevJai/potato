@@ -17,7 +17,7 @@ typedef struct {
     Value* sp;
     Table strings;
     Obj* objects;
-    Table globals
+    Table globals;
 } VM;
 
 extern VM vm;

@@ -96,7 +96,7 @@ bool tableGet(Table* table, ObjString* key, Value* value) {
     return true;
 }
 
-bool tableDelete(Table* table, ObjString* key, Value* value) {
+bool tableDelete(Table* table, ObjString* key) {
     if(table->count == 0) return false;
     Entry* entry = findEntry(table->entries, table->capacity, key);
     if(entry->key == NULL) return false;
