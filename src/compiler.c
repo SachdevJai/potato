@@ -432,9 +432,6 @@ static void declareVariable() {
             break;
         }
         if (identifiersEqual(name, &local->name)) {
-            if(local->depth == -1) {
-                error("Variable with this name already declared in this scope.");
-            }
             error("Variable with this name already declared in this scope.");
         }
     }
