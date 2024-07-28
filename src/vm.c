@@ -32,23 +32,13 @@ static void runtimeError(const char* format, ...) {
 }
 
 void push(Value value) {
-    if(vm.sp < vm.stack + STACK_MAX) {
-        *vm.sp = value;
-        vm.sp++;
-    } else {
-        printf("STACKOVERFLOW\n");
-        exit(1);
-    }
+    *vm.sp = value;
+    vm.sp++;
 }
 
 Value pop() {
-    if(vm.sp > vm.stack) {
-        vm.sp--;
-        return *vm.sp;
-    } else {
-        printf("Cannot pop from stack: Stack empty\n");
-        exit(1);
-    }
+    vm.sp--;
+    return *vm.sp;
 }
 
 static Value peek(int distance) {
@@ -65,6 +55,10 @@ void exitVM() {
     freeTable(&vm.strings);
     freeTable(&vm.globals);
     freeObjects();
+}
+
+static bool isFalsey(Value value) {
+    return IS_NIL(value) || (IS_BOOL(value) && !AS_BOOL(value)) || (IS_NUMBER(value) && AS_NUMBER(value) == 0);
 }
 
 static Value concatenate(Value string1, Value string2) {
@@ -94,6 +88,9 @@ static InterpretResult run() {
     vm.sp--; \
 } while(0);
 #define READ_STRING() AS_STRING(READ_CONSTANT());
+#define READ_SHORT() \
+    (vm.ip += 2, (uint16_t)((vm.ip[-2] << 8) | vm.ip[-1]))
+
     
     for(;;) {
 
@@ -170,11 +167,7 @@ static InterpretResult run() {
                 break;
 
             case OP_NOT:
-                vm.sp[-1] = NUMBER_VAL(
-                    vm.sp[-1].type == IS_NIL(vm.sp[-1]) || 
-                    IS_BOOL(vm.sp[-1]) && !AS_BOOL(vm.sp[-1]) || 
-                    IS_NUMBER(vm.sp[-1]) && !AS_NUMBER(vm.sp[-1])
-                );
+                push(BOOL_VAL(isFalsey(pop())));
                 break;
 
             case OP_EQUAL:
@@ -239,10 +232,30 @@ static InterpretResult run() {
                 break;
             }
 
-            
+            case OP_JUMP_IF_FALSE: {
+                uint16_t offset = READ_SHORT();
+                if (isFalsey(peek(0))) {
+                    vm.ip += offset;
+                } 
+                break;
+            }
+
+            case OP_JUMP: {
+                uint16_t offset = READ_SHORT();
+                vm.ip += offset;
+                break;
+            }
+
+            case OP_LOOP: {
+                uint16_t offset = READ_SHORT();
+                vm.ip -= offset;
+                break;
+            }
+
         }
     }
 
+#undef READ_SHORT
 #undef READ_STRING
 #undef BINARY_OP
 #undef READ_LONG_CONSTANT
